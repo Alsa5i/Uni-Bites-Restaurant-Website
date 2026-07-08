@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout | Uni-Bite</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="logo">Uni-Bite</div>
+        <div class="top-search">
+          <span class="search-icon"><svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+          <input type="text" placeholder="Search for food and cuisines" />
+        </div>
+        <nav class="top-nav">
+          <a href="index (3).html#categories">Categories</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <button class="cart-btn" id="cartBtn"><svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> <span class="cart-badge" id="cartBadge">0</span></button>
+      </div>
+    </header>
+
+    <section class="checkout-page">
+      <h1 class="checkout-title">Checkout</h1>
+
+      <div class="checkout-layout" id="checkoutLayout">
+        <form class="checkout-form" id="checkoutForm">
+          <h2>Delivery Details</h2>
+          <div class="row">
+            <div>
+              <label for="fullname">Full Name</label>
+              <input type="text" id="fullname" name="fullname" placeholder="Jane Doe" required />
+            </div>
+            <div>
+              <label for="phone">Phone</label>
+              <input type="tel" id="phone" name="phone" placeholder="+256 700 000 000" required />
+            </div>
+          </div>
+
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" required />
+
+          <label for="address">Delivery Address</label>
+          <input type="text" id="address" name="address" placeholder="Street, building, apartment" required />
+
+          <div class="row">
+            <div>
+              <label for="area">Area / City</label>
+              <input type="text" id="area" name="area" placeholder="Kampala" required />
+            </div>
+            <div>
+              <label for="payment">Payment Method</label>
+              <select id="payment" name="payment">
+                <option value="cod">Cash on Delivery</option>
+                <option value="momo">Mobile Money</option>
+                <option value="card">Card</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="payment-fields" id="momoFields" hidden>
+            <label for="momoNumber">Mobile Money Number</label>
+            <input type="tel" id="momoNumber" name="momoNumber" placeholder="+256 700 000 000" />
+          </div>
+
+          <div class="payment-fields" id="cardFields" hidden>
+            <label for="cardNumber">Card Number</label>
+            <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" inputmode="numeric" />
+            <div class="row">
+              <div>
+                <label for="cardExpiry">Expiry</label>
+                <input type="text" id="cardExpiry" name="cardExpiry" placeholder="MM/YY" />
+              </div>
+              <div>
+                <label for="cardCvv">CVV</label>
+                <input type="text" id="cardCvv" name="cardCvv" placeholder="123" inputmode="numeric" />
+              </div>
+            </div>
+          </div>
+
+          <label for="notes">Notes (optional)</label>
+          <textarea id="notes" name="notes" rows="3" placeholder="Anything we should know?"></textarea>
+
+          <button type="submit" class="place-order-btn">Place Order</button>
+        </form>
+
+        <aside class="order-summary sticky" id="orderSummary">
+          <h2>Your Order</h2>
+          <div id="orderItems"></div>
+          <p class="order-empty" id="orderEmpty">Your cart is empty.</p>
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span id="orderSubtotal">UGX 0</span>
+          </div>
+          <div class="summary-row">
+            <span>Delivery Fee</span>
+            <span id="orderDelivery">UGX 5,000</span>
+          </div>
+          <div class="summary-total">
+            <span>Total</span>
+            <span id="orderTotal">UGX 0</span>
+          </div>
+        </aside>
+      </div>
+
+      <div class="order-success" id="orderSuccess" style="display: none;">
+        <div class="success-icon"><svg class="icon" viewBox="0 0 24 24" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="8 12.5 11 15.5 16 9.5"/></svg></div>
+        <h2>Order Placed!</h2>
+        <p>Order <strong id="successOrderId"></strong> is confirmed. We'll deliver it to your door shortly.</p>
+        <a class="btn" id="trackBtn" href="track.html">Track your order</a>
+        <a class="btn btn-ghost" href="index (3).html">Back to Home</a>
+      </div>
+    </section>
+
+    <footer class="main-footer">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="footer-logo">Uni-Bite</div>
+          <p class="footer-tagline">
+            Global flavors, delivered to your door.
+          </p>
+          <div class="social-icons">
+            <a href="#" aria-label="Facebook"><svg class="icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12z"/></svg></a>
+            <a href="#" aria-label="Instagram"><svg class="icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/></svg></a>
+            <a href="#" aria-label="Twitter"><svg class="icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M18.9 2H22l-7.5 8.6L23 22h-6.8l-5.3-6.9L4.8 22H1.7l8-9.2L1 2h7l4.8 6.3L18.9 2zm-2.4 18h1.9L7.6 4H5.6l10.9 16z"/></svg></a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="about.html">About Us</a>
+          <a href="careers.html">Careers</a>
+          <a href="blog.html">Blog</a>
+          <a href="track.html">Track Order</a>
+        </div>
+
+        <div class="footer-col">
+          <h4>Cuisines</h4>
+          <a href="cuisines/congolese.html">Congolese</a>
+          <a href="cuisines/ugandan.html">Ugandan</a>
+          <a href="cuisines/eritrean.html">Eritrean</a>
+          <a href="cuisines/sudanese.html">Sudanese</a>
+        </div>
+
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <a href="contact.html">Get in Touch</a>
+          <a href="contact.html#form">Send a Message</a>
+          <a href="help.html">Help Center</a>
+          <a href="privacy.html">Privacy Policy</a>
+        </div>
+
+        <div class="footer-col">
+          <h4>Get the App</h4>
+          <a class="store-badge" href="#"><svg class="icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><line x1="11" y1="18" x2="13" y2="18"/></svg> App Store</a>
+          <a class="store-badge" href="#"><svg class="icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Google Play</a>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 Uni-Bite Restaurant — Designed for Excellence</p>
+        <div class="footer-bottom-links">
+          <a href="#">Terms</a>
+          <a href="#">Privacy</a>
+          <a href="#">Cookies</a>
+        </div>
+      </div>
+    </footer>
+
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping cart">
+      <div class="cart-header">
+        <h3>Your Cart</h3>
+        <button class="cart-close" id="cartClose" aria-label="Close cart">&times;</button>
+      </div>
+      <div class="cart-items" id="cartItems"></div>
+      <p class="cart-empty" id="cartEmpty">Your cart is empty.</p>
+      <div class="cart-footer">
+        <div class="cart-total-row"><span>Total</span><span id="cartTotal">UGX 0</span></div>
+        <button class="checkout-btn" id="checkoutBtn">Checkout</button>
+      </div>
+    </aside>
+    <script src="cart.js"></script>
+    <script src="checkout.js"></script>
+  </body>
+</html>
