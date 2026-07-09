@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 184 48" width="184" height="48" role="img" aria-label="Uni-Bite">
+  <circle cx="24" cy="24" r="20" fill="#e67e22" />
+  <g fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M16 13v22M20.5 13v22M25 13v22" />
+    <path d="M16 13c0-4 9-4 9 0M20.5 13c0-4 9-4 9 0" />
+    <path d="M31 13c2.4 0 2.4 7 0 7v15" />
+  </g>
+  <text x="54" y="32" font-family="Helvetica Neue, Arial, sans-serif" font-size="23" font-weight="800" fill="#1a1a1a">Uni-Bite</text>
+</svg>

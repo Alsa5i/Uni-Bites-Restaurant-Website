@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Operator Dashboard | Uni-Bite</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .op-layout { display: flex; min-height: 100vh; }
+      .op-sidebar {
+        width: 240px;
+        background: var(--dark);
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        padding: 22px 18px;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+      }
+      .op-logo { font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 34px; display: flex; align-items: center; }
+      .op-logo img { height: 32px; width: auto; display: block; }
+      .op-nav { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+      .op-nav .op-tab {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        justify-content: flex-start;
+        text-align: left;
+        color: #fff;
+        background: transparent;
+        border: 1px solid transparent;
+        border-radius: 12px;
+        padding: 12px 16px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 0.95rem;
+      }
+      .op-nav .op-tab:hover { background: rgba(255, 255, 255, 0.08); }
+      .op-nav .op-tab.active { background: var(--primary); border-color: var(--primary); }
+      .op-logout {
+        margin-top: auto;
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        padding: 12px;
+        cursor: pointer;
+        font-weight: 700;
+      }
+      .op-logout:hover { background: var(--primary-dark); }
+      .op-main { margin-left: 240px; flex: 1; padding: 30px 4% 80px; }
+      .op-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+      .op-head h1 { font-size: 1.8rem; color: var(--dark); }
+      .op-panel { display: none; }
+      .op-panel.active { display: block; }
+      .op-card { background: #fff; border-radius: var(--radius); padding: 24px; box-shadow: 0 3px 12px rgba(0,0,0,0.08); margin-bottom: 24px; }
+      .op-card h2 { margin-bottom: 16px; color: var(--dark); }
+      .op-form label { display: block; font-weight: 600; font-size: 0.85rem; margin: 12px 0 6px; }
+      .op-form input, .op-form select, .op-form textarea { width: 100%; padding: 11px 13px; border: 1px solid #ddd; border-radius: 10px; font-family: inherit; font-size: 0.95rem; }
+      .op-form .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+      .op-submit { margin-top: 18px; padding: 12px 24px; background: var(--primary); color: #fff; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; }
+      .op-submit:hover { background: var(--primary-dark); }
+      .op-msg { font-size: 0.9rem; margin-top: 12px; }
+      .op-msg.ok { color: #1e7e4f; }
+      .op-msg.err { color: #c0392b; }
+      table.op-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: var(--radius); overflow: hidden; box-shadow: 0 3px 12px rgba(0,0,0,0.08); }
+      .op-table th, .op-table td { padding: 12px 14px; text-align: left; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+      .op-table th { background: var(--light); color: var(--dark); }
+      .op-table select { padding: 6px 8px; border-radius: 8px; border: 1px solid #ddd; }
+      .op-del { background: #c0392b; color: #fff; border: none; border-radius: 8px; padding: 6px 12px; cursor: pointer; }
+      .op-empty { color: var(--muted); padding: 20px; text-align: center; }
+      @media (max-width: 640px) {
+        .op-sidebar { position: static; width: 100%; flex-direction: row; align-items: center; flex-wrap: wrap; }
+        .op-logo { margin: 0 16px 0 0; }
+        .op-nav { flex-direction: row; flex: none; }
+        .op-logout { margin: 0 0 0 auto; }
+        .op-main { margin-left: 0; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="op-layout">
+      <aside class="op-sidebar">
+        <div class="op-logo"><img src="uni%20logo.jpeg" alt="Uni-Bite" /></div>
+        <nav class="op-nav">
+          <button class="op-tab active" data-tab="orders">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            Orders
+          </button>
+          <button class="op-tab" data-tab="dishes">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16v5a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-5z"/><path d="M3 11h18"/><path d="M9 7c0-1 1-2 3-2s3 1 3 2"/></svg>
+            Dishes
+          </button>
+          <button class="op-tab" data-tab="cuisines">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18a8 8 0 0 1-8 8 8 8 0 0 1-8-8z"/><path d="M9 7c0-1 .7-1.5 1.5-1.5S12 6 12 7"/><path d="M14 7c0-1 .7-1.5 1.5-1.5S17 6 17 7"/></svg>
+            Cuisines
+          </button>
+        </nav>
+        <button class="op-logout" id="opLogout" type="button">Log Out</button>
+      </aside>
+
+      <main class="op-main">
+        <div class="op-head">
+          <h1 id="opTitle">Orders</h1>
+          <span id="opUser" class="nav-hello"></span>
+        </div>
+
+        <section class="op-panel active" id="panel-orders">
+          <div class="op-card">
+            <h2>Customer Orders</h2>
+            <div id="ordersTable"></div>
+          </div>
+        </section>
+
+        <section class="op-panel" id="panel-dishes">
+          <div class="op-card">
+            <h2>Add a Dish</h2>
+            <form class="op-form" id="dishForm">
+              <div class="row">
+                <div>
+                  <label for="dName">Dish Name</label>
+                  <input type="text" id="dName" placeholder="Liboké" required />
+                </div>
+                <div>
+                  <label for="dPrice">Price (UGX)</label>
+                  <input type="number" id="dPrice" placeholder="50000" required />
+                </div>
+              </div>
+              <label for="dCuisine">Cuisine</label>
+              <select id="dCuisine"></select>
+              <label for="dImg">Image URL</label>
+              <input type="text" id="dImg" placeholder="https://..." />
+              <label for="dDesc">Description</label>
+              <textarea id="dDesc" rows="2" placeholder="Short description"></textarea>
+              <button type="submit" class="op-submit">Add Dish</button>
+              <p class="op-msg" id="dishMsg"></p>
+            </form>
+          </div>
+          <div class="op-card">
+            <h2>All Dishes</h2>
+            <div id="dishesList"></div>
+          </div>
+        </section>
+
+        <section class="op-panel" id="panel-cuisines">
+          <div class="op-card">
+            <h2>Add a Cuisine</h2>
+            <form class="op-form" id="cuisineForm">
+              <label for="cName">Cuisine Name</label>
+              <input type="text" id="cName" placeholder="Ethiopian" required />
+              <label for="cDesc">Description</label>
+              <textarea id="cDesc" rows="2" placeholder="Short description"></textarea>
+              <button type="submit" class="op-submit">Add Cuisine</button>
+              <p class="op-msg" id="cuisineMsg"></p>
+            </form>
+          </div>
+          <div class="op-card">
+            <h2>All Cuisines</h2>
+            <div id="cuisinesList"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="admin.js"></script>
+  </body>
+</html>

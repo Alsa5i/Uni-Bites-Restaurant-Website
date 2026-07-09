@@ -13,6 +13,14 @@
     return "UGX " + Number(n).toLocaleString("en-US");
   }
 
+  function getAuth() {
+    try {
+      return JSON.parse(localStorage.getItem("unibite_auth"));
+    } catch (e) {
+      return null;
+    }
+  }
+
   function getOrders() {
     try {
       return JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
@@ -29,8 +37,19 @@
     }
   }
 
+  var auth = getAuth();
+  if (auth && auth.role === "admin") {
+    window.location.href = "index (3).html";
+    return;
+  }
+  if (!auth) {
+    window.location.href = "login.html";
+    return;
+  }
+
   var orders = getOrders();
   var profile = getProfile();
+  if (profile && profile.email && profile.email !== auth.email) profile = null;
   if (!profile && orders.length) {
     profile = orders[orders.length - 1].customer;
   }
@@ -40,16 +59,18 @@
   var phoneEl = document.getElementById("profilePhone");
   var avatarEl = document.getElementById("profileAvatar");
 
-  if (profile) {
-    nameEl.textContent = profile.name || "Customer";
-    emailEl.textContent = profile.email || "";
-    phoneEl.textContent = profile.phone || "";
-    avatarEl.textContent = profile.name
-      ? profile.name.charAt(0).toUpperCase()
-      : "U";
+  var displayProfile = profile && profile.email === auth.email ? profile : auth;
+  if (displayProfile) {
+    nameEl.textContent = displayProfile.name || auth.name || "Customer";
+    emailEl.textContent = displayProfile.email || auth.email || "";
+    phoneEl.textContent = displayProfile.phone || "";
+    avatarEl.textContent = (displayProfile.name || auth.name || "U")
+      .charAt(0)
+      .toUpperCase();
   } else {
-    nameEl.textContent = "Guest";
-    avatarEl.textContent = "U";
+    nameEl.textContent = auth.name || "Customer";
+    emailEl.textContent = auth.email || "";
+    avatarEl.textContent = (auth.name || "U").charAt(0).toUpperCase();
   }
 
   var historyEl = document.getElementById("orderHistory");

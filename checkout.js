@@ -4,6 +4,15 @@
   var LAST_KEY = "unibite_last_order";
   var DELIVERY = 5000;
 
+  var _auth;
+  try {
+    _auth = JSON.parse(localStorage.getItem("unibite_auth"));
+  } catch (e) {}
+  if (_auth && _auth.role === "admin") {
+    window.location.href = "index (3).html";
+    return;
+  }
+
   var itemsEl = document.getElementById("orderItems");
   var emptyEl = document.getElementById("orderEmpty");
   var subtotalEl = document.getElementById("orderSubtotal");
@@ -116,6 +125,12 @@
       localStorage.setItem(LAST_KEY, order.id);
       localStorage.setItem("unibite_profile", JSON.stringify(order.customer));
       localStorage.removeItem(CART_KEY);
+
+      fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(order)
+      }).catch(function () {});
 
       document.getElementById("successOrderId").textContent = order.id;
       document.getElementById("trackBtn").href =

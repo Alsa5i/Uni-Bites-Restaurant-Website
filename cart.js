@@ -18,6 +18,42 @@
     return "UGX " + Number(n).toLocaleString("en-US");
   }
 
+  function flyToCart(fromEl) {
+    var cartBtn = document.getElementById("cartBtn");
+    if (!fromEl || !cartBtn) return;
+    var start = fromEl.getBoundingClientRect();
+    var end = cartBtn.getBoundingClientRect();
+    var dot = document.createElement("div");
+    dot.className = "fly-to-cart";
+    dot.style.left = start.left + start.width / 2 + "px";
+    dot.style.top = start.top + start.height / 2 + "px";
+    document.body.appendChild(dot);
+
+    var dx = end.left + end.width / 2 - (start.left + start.width / 2);
+    var dy = end.top + end.height / 2 - (start.top + start.height / 2);
+
+    var anim = dot.animate(
+      [
+        { transform: "translate(-50%, -50%) scale(1)", opacity: 1 },
+        { transform: "translate(calc(-50% + " + dx * 0.5 + "px), calc(-50% + " + dy * 0.5 + "px)) scale(1.2)", opacity: 1, offset: 0.6 },
+        { transform: "translate(calc(-50% + " + dx + "px), calc(-50% + " + dy + "px)) scale(0.3)", opacity: 0.4 }
+      ],
+      { duration: 650, easing: "cubic-bezier(0.45, 0, 0.55, 1)" }
+    );
+    anim.onfinish = function () {
+      dot.remove();
+      var badge = document.getElementById("cartBadge");
+      if (badge) {
+        badge.classList.remove("bump");
+        void badge.offsetWidth;
+        badge.classList.add("bump");
+      }
+      cartBtn.classList.remove("shake");
+      void cartBtn.offsetWidth;
+      cartBtn.classList.add("shake");
+    };
+  }
+
   function addToCart(item) {
     var existing = cart.find(function (i) {
       return i.id === item.id;
@@ -120,12 +156,17 @@
     var add = e.target.closest(".add-cart-btn");
     if (add) {
       var card = add.closest(".product-card");
+      flyToCart(add);
       addToCart({
         id: card.dataset.id,
         name: card.dataset.name,
         price: parseInt(card.dataset.price, 10),
         img: card.dataset.img || ""
       });
+      add.classList.add("added");
+      setTimeout(function () {
+        add.classList.remove("added");
+      }, 1200);
       return;
     }
 

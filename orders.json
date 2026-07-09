@@ -1,0 +1,71 @@
+[
+  {
+    "id": "UB-1234",
+    "items": [
+      {
+        "name": "Matooke",
+        "price": 25000,
+        "qty": 2,
+        "img": ""
+      },
+      {
+        "name": "Liboke",
+        "price": 50000,
+        "qty": 1,
+        "img": ""
+      }
+    ],
+    "subtotal": 100000,
+    "delivery": 5000,
+    "total": 105000,
+    "customer": {
+      "name": "Jane",
+      "phone": "+256",
+      "address": "X",
+      "area": "Kampala"
+    },
+    "payment": "cod",
+    "status": 0,
+    "createdAt": 1783517098636
+  },
+  {
+    "id": "UB-3281",
+    "items": [
+      {
+        "id": "ss-kisra",
+        "name": "Kisra",
+        "price": 15000,
+        "img": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=500&q=60",
+        "qty": 1
+      },
+      {
+        "id": "cg-fufu",
+        "name": "Fufu",
+        "price": 30000,
+        "img": "../Congo/congo 2).jfif",
+        "qty": 1
+      },
+      {
+        "id": "cg-liboke",
+        "name": "Liboké",
+        "price": 50000,
+        "img": "../Congo/congo 3.jfif",
+        "qty": 1
+      }
+    ],
+    "subtotal": 95000,
+    "delivery": 5000,
+    "total": 100000,
+    "customer": {
+      "name": "ALSAFI ABDALLA IBRAHIM ALSAFI",
+      "phone": "+256767217787",
+      "email": "lizelsd249@gmail.com",
+      "address": "Ggaba Rd",
+      "area": "Kampala",
+      "notes": "kisra with mild chill and 1 coke soda"
+    },
+    "payment": "cod",
+    "status": 3,
+    "createdAt": 1783517695571
+  }
+]

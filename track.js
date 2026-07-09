@@ -12,7 +12,7 @@
     return "UGX " + Number(n).toLocaleString("en-US");
   }
 
-  function getOrders() {
+  function getLocalOrders() {
     try {
       return JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
     } catch (e) {
@@ -20,39 +20,23 @@
     }
   }
 
-  function findOrder() {
-    var params = new URLSearchParams(window.location.search);
-    var id = params.get("id") || localStorage.getItem(LAST_KEY);
-    var orders = getOrders();
+  var params = new URLSearchParams(window.location.search);
+  var id = params.get("id") || localStorage.getItem(LAST_KEY);
+
+  function findLocal() {
+    var orders = getLocalOrders();
     for (var i = 0; i < orders.length; i++) {
       if (orders[i].id === id) return orders[i];
     }
     return null;
   }
 
-  function saveOrder(order) {
-    var orders = getOrders();
-    for (var i = 0; i < orders.length; i++) {
-      if (orders[i].id === order.id) {
-        orders[i] = order;
-        break;
-      }
-    }
-    localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
-  }
-
   var content = document.getElementById("trackContent");
   var notFound = document.getElementById("trackNotFound");
-  var order = findOrder();
-
-  if (!order) {
-    if (content) content.style.display = "none";
-    if (notFound) notFound.style.display = "block";
-    return;
-  }
-
   var stepperEl = document.getElementById("trackStepper");
   var itemsEl = document.getElementById("trackItems");
+
+  var order = findLocal();
 
   function renderStepper() {
     stepperEl.innerHTML = "";
@@ -63,8 +47,7 @@
       var mark = idx < order.status ? "✓" : idx + 1;
       var div = document.createElement("div");
       div.className = cls;
-      div.innerHTML =
-        '<div class="dot">' + mark + "</div><label>" + label + "</label>";
+      div.innerHTML = '<div class="dot">' + mark + "</div><label>" + label + "</label>";
       stepperEl.appendChild(div);
     });
   }
@@ -94,16 +77,42 @@
       PAYMENTS[order.payment] || order.payment;
   }
 
-  renderStepper();
-  renderDetails();
-
-  var timer = setInterval(function () {
-    if (order.status < STEPS.length - 1) {
-      order.status += 1;
-      saveOrder(order);
-      renderStepper();
-    } else {
-      clearInterval(timer);
+  function renderAll() {
+    if (!order) {
+      if (content) content.style.display = "none";
+      if (notFound) notFound.style.display = "block";
+      return;
     }
-  }, 5000);
+    if (content) content.style.display = "block";
+    if (notFound) notFound.style.display = "none";
+    renderStepper();
+    renderDetails();
+  }
+
+  renderAll();
+
+  // Poll the server so the page reflects admin status changes live
+  function poll() {
+    if (!id) return;
+    fetch("/api/orders")
+      .then(function (r) {
+        return r.json();
+      })
+      .then(function (list) {
+        var s = list.find(function (o) {
+          return o.id === id;
+        });
+        if (!s) return;
+        if (!order) {
+          order = s;
+          renderAll();
+        } else if (s.status !== order.status) {
+          order.status = s.status;
+          renderStepper();
+        }
+      })
+      .catch(function () {});
+  }
+
+  setInterval(poll, 3000);
 })();
